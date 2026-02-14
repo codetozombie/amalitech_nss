@@ -10,7 +10,7 @@ st.set_page_config(page_title="Nutrient Matrix", layout="wide")
 @st.cache_data
 def load_data():
     # Load data using your helper function
-    df = wrangle("dataset_vs.csv")
+    df = wrangle("snacks.csv")
     
     # Apply your categorization helper
     df['high_level_category'] = df.apply(assign_category, axis=1)

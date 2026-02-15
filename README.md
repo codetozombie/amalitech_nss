@@ -1,7 +1,7 @@
 # Market Gap Analysis: Open Food Facts
 
 ## A. The Executive Summary
-This analysis of the Open Food Facts dataset identifies a significant market opportunity within the West African snack sector, specifically for high-protein, low-sugar alternatives. While the current market is saturated with sugary, processed items, the data reveals a "Blue Ocean" opportunity in the **Meat & Seafood** category. Our predictive model and dashboard suggest that introducing products with **>37g of protein** and **<1.6g of sugar** will capture the highest value. Furthermore, the "Candidate's Choice" analysis confirms that this category offers a strong "Clean Label" advantage, averaging significantly fewer ingredients than competitor energy bars.
+This market analysis of the Open Food Facts dataset reveals a significant "Blue Ocean" opportunity in the Meat & Seafood snack category, which remains underserved compared to the saturated, high-sugar Energy Bar market. The data identifies a specific "Opportunity Zone" for products containing over 37g of protein and less than 1.6g of sugar per 100g, targets that maximize nutritional value for health-conscious consumers. Furthermore, the "Candidate's Choice" complexity analysis confirms that Meat & Seafood snacks offer a decisive "Clean Label" advantage, averaging a median of ~12 ingredients compared to ~25 ingredients in competitor cereal bars. Consequently, the recommended strategy is to launch a high-protein, savory snack that competes on both superior macronutrients and ingredient simplicity.
 
 ## B. Project Links
 * **Notebook:** The full analysis code, PDF, and HTML reports can be found in the [GitHub Repository](https://github.com/codetozombie/amalitech_nss).

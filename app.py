@@ -2,10 +2,8 @@ import streamlit as st
 import plotly.express as px
 import pandas as pd
 import numpy as np
-# Assuming you have these, otherwise comment them out
-# from helpers import assign_category, wrangle 
 
-# --- 1. CONFIG & DATA LOADING ---
+# data loading and processing
 st.set_page_config(page_title="Nutrient Matrix", layout="wide")
 
 @st.cache_data
@@ -30,68 +28,67 @@ except Exception as e:
     st.error(f"Error loading data: {e}. Please ensure 'snacks.csv' is in the directory.")
     st.stop()
 
-# --- 2. DASHBOARD HEADER ---
-st.title("🍎 The Nutrient Matrix Dashboard")
+# dashboard title and description
+st.title("The Nutrient Matrix Dashboard")
 st.markdown("Identify product clusters and spot the **'High Protein, Low Sugar'** opportunity gap.")
 
-# --- 3. SIDEBAR FILTERS ---
+# siderbar filters
 st.sidebar.header("Filter Settings")
 
-# Get unique categories for the dropdown
+# get unique categories for the multiselect
 all_cats = sorted(df['high_level_category'].unique())
 
 selected_cats = st.sidebar.multiselect(
     "Select Categories:",
     options=all_cats,
-    # Select defaults that show the contrast between Nuts and Meat
+    # select the defaults
     default=[c for c in ['Nuts & Seeds', 'Meat & Seafood', 'Energy & Cereal Bars', 'Chips & Popcorn'] if c in all_cats]
 )
 
 if not selected_cats:
-    st.warning("⚠️ Please select at least one category from the sidebar.")
+    st.warning("Please select at least one category from the sidebar.")
     st.stop()
 
-# Filter the dataframe
+# filter the dataframe based on selected categories
 filtered_df = df[df['high_level_category'].isin(selected_cats)].copy()
 
-# --- 4. STORY 4: THE RECOMMENDATION ENGINE (UPDATED) ---
-# Logic: Find the "Blue Ocean" (High Quality) rather than "Red Ocean" (High Volume)
-# Zone Definition: Protein > 15g AND Sugar < 5g (The "Healthy Zone")
+# recommendation logic
+# define the "Opportunity Zone" as products with low sugar (<5g) and high protein (>20g)
 zone_df = filtered_df[
     (filtered_df['sugars_100g'] < 5) & 
-    (filtered_df['proteins_100g'] > 15)
+    (filtered_df['proteins_100g'] > 20)
 ]
 
-st.subheader("💡 Key Insight & Recommendation")
+st.subheader("Key Insight & Recommendation")
 
 if not zone_df.empty:
-    # 1. Group by category and find the mean ratio (Quality Score)
+    # group by category and calculate the average protein-to-sugar ratio as a "Quality Score"
     quality_scores = zone_df.groupby('high_level_category')['protein_sugar_ratio'].mean()
     
-    # 2. Pick the category with the highest quality score
+    # pick the category with the highest average ratio as the "Best Opportunity"
     best_category = quality_scores.idxmax()
     
-    # 3. Get stats for the recommendation text
+    # get the average protein and sugar values for that category to provide specific targets
     cat_stats = zone_df[zone_df['high_level_category'] == best_category]
     avg_prot = cat_stats['proteins_100g'].mean()
     avg_sug = cat_stats['sugars_100g'].mean()
     
-    # 4. Display the Recommendation
+    # display the recommendation
     st.success(f"Based on the data, the biggest market opportunity is in **{best_category}**, "
                f"specifically targeting products with more than **{avg_prot:.0f}g** of protein "
                f"and less than **{avg_sug:.1f}g** of sugar.")
     
-    st.caption(f"ℹ️ Why this category? While other categories may have more products, **{best_category}** "
+    st.caption(f"Why this category? While other categories may have more products, **{best_category}** "
                "offers the highest nutritional density (Protein-to-Sugar ratio), representing a 'Quality' gap in the market.")
 
 else:
     st.info("No clear recommendation found with current filters. Try selecting 'Meat & Seafood' to see the opportunity.")
 
-# --- 5. CHART & METRICS LAYOUT ---
+#chart and metrics
 col_chart, col_metrics = st.columns([3, 1])
 
 with col_chart:
-    # The Plotly Scatter Plot
+    # plotly scatter plot
     fig = px.scatter(
         filtered_df,
         x="sugars_100g",
@@ -105,42 +102,42 @@ with col_chart:
             "protein_sugar_ratio": ":.1f"
         },
         title="<b>Nutrient Matrix:</b> Protein vs. Sugar Content",
-        template="plotly_dark", # Switched to dark to match your screenshot
+        template="plotly_dark", # color scheme
         height=550,
         opacity=0.7
     )
     
-    # Reference Lines
+    # refine axes
     fig.add_vline(x=5, line_dash="dash", line_color="red", annotation_text="Low Sugar (<5g)")
-    fig.add_hline(y=15, line_dash="dash", line_color="green", annotation_text="High Protein (>15g)")
+    fig.add_hline(y=20, line_dash="dash", line_color="green", annotation_text="High Protein (>20g)")
     
-    # Highlight the "Blue Ocean" (Top Left)
-    fig.add_shape(type="rect", x0=0, y0=15, x1=5, y1=100, line=dict(width=0), fillcolor="green", opacity=0.1)
+    # highlight the "Opportunity Zone" with a shaded rectangle
+    fig.add_shape(type="rect", x0=0, y0=20, x1=5, y1=100, line=dict(width=0), fillcolor="green", opacity=0.1)
     
     st.plotly_chart(fig, use_container_width=True)
 
 with col_metrics:
-    st.subheader("📊 Zone Analysis")
+    st.subheader("Zone Analysis")
     st.markdown("**Top-Left Quadrant Metrics**")
     
     st.metric("Total Products in Zone", zone_df.shape[0])
     
     if not zone_df.empty:
-        # Volume Leader (The Saturated Market)
+        # volume leader
         vol_winner = zone_df['high_level_category'].value_counts().idxmax()
         vol_count = zone_df['high_level_category'].value_counts().max()
-        st.metric("📦 Volume Leader (Saturated)", vol_winner, f"{vol_count} items")
+        st.metric("Volume Leader (Saturated)", vol_winner, f"{vol_count} items")
         
-        # Quality Leader (The Opportunity)
+        # quality leader 
         qual_winner = zone_df.groupby('high_level_category')['protein_sugar_ratio'].mean().idxmax()
         qual_score = zone_df.groupby('high_level_category')['protein_sugar_ratio'].mean().max()
-        st.metric("💪 Quality Leader (Opportunity)", qual_winner, f"{qual_score:.1f} Ratio")
+        st.metric("Quality Leader (Opportunity)", qual_winner, f"{qual_score:.1f} Ratio")
 
-# --- 6. LEADERBOARD ---
+#leaderboard
 st.markdown("---")
-st.subheader("🏆 Leaderboard: Top 5 'Power Foods'")
+st.subheader("Leaderboard: Top 5 'Power Foods'")
 
-# Sorting by Ratio ensures the "Quality" items appear first
+# sort by ratio and get top 5 per category
 leaderboard = (
     filtered_df
     .sort_values(by='protein_sugar_ratio', ascending=False)

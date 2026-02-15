@@ -1,62 +1,105 @@
-# Market Gap Analysis
+# Market Gap Analysis: Open Food Facts
 
 ## A. The Executive Summary
-[Insert Summary Here: e.g., "This analysis of the Open Food Facts dataset reveals a significant market gap in low-sugar, high-protein snacks in the West African region. While 60% of current products contain high sugar levels, consumer demand for healthier alternatives is rising. Our predictive model suggests that introducing a plant-based protein bar could capture a 15% market share within the first year."]
+This analysis of the Open Food Facts dataset identifies a significant market opportunity within the West African snack sector, specifically for high-protein, low-sugar alternatives. While the current market is saturated with sugary, processed items, the data reveals a "Blue Ocean" opportunity in the **Meat & Seafood** category. Our predictive model and dashboard suggest that introducing products with **>37g of protein** and **<1.6g of sugar** will capture the highest value. Furthermore, the "Candidate's Choice" analysis confirms that this category offers a strong "Clean Label" advantage, averaging significantly fewer ingredients than competitor energy bars.
 
 ## B. Project Links
-* **Notebook:** The fully work can be found in [GitHub repo link here](https://github.com/codetozombie/amalitech_nss) saved as `main.ipynb` and PDF and HTML files are also saved as `main.pdf` & `main.html` respectively. Furthermore the visualization for Story is saved as `app.py`
-* **Dashboard:** [Link to Dashboard](https://codetozombie-amalitech-nss-app-iirfmj.streamlit.app/)
+* **Notebook:** The full analysis code, PDF, and HTML reports can be found in the [GitHub Repository](https://github.com/codetozombie/amalitech_nss).
+* **Dashboard:** [Interactive Streamlit Dashboard](https://codetozombie-amalitech-nss-app-iirfmj.streamlit.app/)
 * **Presentation:** [Link to Slides (PDF/PPT)](YOUR_LINK_HERE)
 * **Video Walkthrough (Optional):** [Link to YouTube](YOUR_LINK_HERE)
 
 ## C. Technical Explanation
 
-### Data Cleaning
-The full data cleaning and exploration was done in `helpers/task_1.ipynb` and a `wrangle` function was derived out it. The following was done clean the data.
-1.  **Get rows with Snacks :** Subsetted the data to snacks only since we are dealing with Snacks
-2.  **Drop Columns:** 
-- Dropped coloumns with more than 80% of its values were missing
-- Dropped "code", "url", "created_t", "created_datetime", "last_modified_t", 
-    "last_modified_datetime", "last_modified_by", "last_updated_t", "last_updated_datetime" columns
-    since I was not going to use them 
-- Dropped columns  "categories", "categories_tags", "countries", "countries_tags", "main_category", "states", "states_tags". The duplicated each each other 
-- Dropped columns "ingredients_tags", "ingredients_analysis_tags", "serving_size", "serving_quantity". I was not going to use them.
-- Filled missing values in product_name and countries_en with "Unknown"
-- Replace nutriscore_grade's missing vale with unknown
-- replace missing nova_group(food_processed) with the most common value (mode)
-- reomve rows with energy_kcal_100g > 900 i.e reaching its theoretical limits
-- reomve rows with energy_100g > 4000 i.e reaching its theoretical limits
-- reomve rows with fat_100g, sugars_100g, proteins_100g , fruits-vegetables-nuts-estimate-from-ingredients_100g, salt_100g, and cabohydrate_100g> 100 i.e reaching theoretical limits
-- remove  saturated_fat_100g which did not satify the condition Saturated Fat must be <= Total Fat 
-- reomve rows with fiber_100g > 40 i.e reaching theoretical limits
-- reomve rows with nutrition-score-fr_100g < -15 or > 40 i. reaching its theoretical limits
-- handle na values for categoies_en for snacks and convert to lowercase
+### Data Cleaning Strategy
+The data cleaning process was executed in `helpers/task_1.ipynb` and encapsulated in a reusable `wrangle` function. The approach focused on data integrity and removing noise:
+1.  **Scope Filtering:** The dataset was strictly subsetted to relevant "Snack" categories.
+2.  **Dimensionality Reduction:** Dropped columns with >80% missing values and administrative metadata (e.g., `url`, `created_t`, `states_tags`) that offered no analytical value.
+3.  **Imputation:** Missing values in `product_name` and `countries_en` were labeled as "Unknown." Statistical mode imputation was used for the `nova_group` (processing level).
+4.  **Outlier Removal & Biological Limits:**
+    * Removed rows exceeding theoretical nutritional limits (e.g., Energy > 900 kcal/100g, Macronutrients > 100g/100g).
+    * Enforced logical constraints (e.g., Saturated Fat must be ≤ Total Fat).
+    * Removed Nutri-Score outliers (< -15 or > 40).
 
+### Candidate's Choice: Ingredient Complexity Analysis
+For the "Candidate's Choice" requirement, I developed a **Clean Label/Ingredient Complexity Metric**.
+* **Goal:** To determine which high-protein categories offer a "cleaner" product profile to appeal to health-conscious consumers avoiding ultra-processed foods (UPFs).
+* **Implementation:** I engineered a feature `ingredient_count` by parsing the comma-separated `ingredients_text`.
+* **Result:** A comparative analysis revealed that **Meat & Seafood** snacks (Median ~12 ingredients) are significantly "cleaner" than **Energy & Cereal Bars** (Median ~25 ingredients). This strengthens the recommendation to pivot toward savory protein snacks, as they compete on both macronutrients and ingredient simplicity.
 
-3.  **Outlier Detection:** [e.g., Filtered out products with impossible values (e.g., sugar content > 100g per 100g).]
+---
 
-### Candidate's Choice
-For the Candidate's Choice requirement, I implemented [Name of Feature/Analysis].
-* **What I did:** [Brief description, e.g., "I added a sentiment analysis on product ingredients to flag potential allergens automatically."]
-* **Why:** [Brief justification, e.g., "This feature helps users with dietary restrictions identify safe products instantly."]
+## Methodology: Category Engineering
+
+To ensure accurate analysis, raw category data was normalized and reclassified using a **Hierarchical Keyword Matching System**.
+
+### 1. Text Preparation
+Fields (`categories_en`, `product_name`) were combined, lowercased, and normalized (hyphens converted to spaces) to create a searchable text string.
+
+### 2. Priority-Based Assignment
+Categories were assigned based on a "Waterfall" priority logic—matches at Level 1 override matches at Level 5.
+
+* **Level 1 (Non-Snack/Meals):** Beverages, Supplements, Meals & Sandwiches.
+* **Level 2 (High Value/Natural):** Meat & Seafood, Fruit & Veggie, Nuts & Seeds, Dairy.
+* **Level 3 (Salty):** Chips & Popcorn.
+* **Level 4 (Sweet):** Breakfast/Cereals, Energy Bars, Biscuits/Cakes, Chocolates.
+* **Level 5 (Fallback):** Savory Misc, Plant-Based Misc.
+
+*If no keywords matched, the product was labeled "Other Snacks".*
+
+---
+
+## Dashboard Features
+
+The Streamlit dashboard allows stakeholders to visualize the "Opportunity Zone" (High Protein, Low Sugar).
+
+* **Opportunity Zone Definition:** Products containing **Sugar < 5g/100g** AND **Protein > 20g/100g**.
+* **Leaderboard:** Ranks top products by their Protein-to-Sugar ratio.
+* **Ingredient Drivers:** Identifies that **Chicken**, **Dairy**, and **Beef** are the primary protein drivers in the current opportunity zone.
 
 ---
 
 ## Project Structure
-* `main.ipynb`: The main analysis code.
-* `main.html` / `main.pdf`: Exported version of the analysis for easy viewing.
-* `requirements.txt`: List of dependencies.
-* `README.md`: Project documentation.
-* `helpers/` : Consist each story attempted and rough work I did.
-* `dataset/dataset_vs.csv` : The dataset is from the open food dataset where the first 100_000 rows where should. To get that after extracting the dataset on Windows run command in PowerShell ```Get-Content "en.openfoodfacts.org.products.csv" -TotalCount 100000 | Set-Content "openfoodfacts_100k.csv" ``` and Mac use this code in the Terminal ```head -n 100000 en.openfoodfacts.org.products.csv > openfoodfacts_100k.csv ``` and Linux use this command ```zcat en.openfoodfacts.org.products.csv.gz | head -n 100000 > openfoodfacts_100k.csv ```.
-* `dataset/snacks.csv` : The formatted data to be used in the visualization.
-* `app.py` : Script to open the visualizations using Streamlit.
 
-## How to Run
-1.  Clone the repository.
-2. Create a `dataset` folder
-2. Download the [Open Food Dataset](https://world.openfoodfacts.org/data) and extract the file in the `dataset` folder.
-4. To get that after extracting the dataset on Windows run command in PowerShell ```Get-Content "en.openfoodfacts.org.products.csv" -TotalCount 100000 | Set-Content "openfoodfacts_100k.csv" ``` and Mac use this code in the Terminal ```head -n 100000 en.openfoodfacts.org.products.csv > openfoodfacts_100k.csv ``` and Linux use this command ```zcat en.openfoodfacts.org. Mind you rename accordingly.
-2.  Install dependencies: `pip install -r requirements.txt`
-3.  Open `main.ipynb` in Jupyter or VS Code and run all cells
-4. To get the visualization run `streamlit run app.py` in the terminal
+* `main.ipynb`: The primary analysis notebook.
+* `app.py`: Source code for the Streamlit visualization dashboard.
+* `helpers/`: Contains the cleaning scripts and data wrangling functions.
+* `dataset/`:
+    * `snacks.csv`: The cleaned, processed data used for visualization.
+    * *Note: Raw data is not included due to size.*
+* `requirements.txt`: Python dependencies.
+
+---
+
+## How to Run Locally
+
+### 1. Setup
+Clone the repository:
+```bash
+git clone [https://github.com/codetozombie/amalitech_nss](https://github.com/codetozombie/amalitech_nss)
+cd amalitech_nss
+```
+
+### 2. Data Acquisition
+Create a dataset folder. Download the Open Food Facts CSV. To replicate the analysis on the first 100,000 rows, run the following command for your OS:
+
+Windows (PowerShell):
+```bash
+Get-Content "en.openfoodfacts.org.products.csv" -TotalCount 100000 | Set-Content "dataset/openfoodfacts_100k.csv"
+```
+Mac/Linux (Terminal):
+```bash
+head -n 100000 en.openfoodfacts.org.products.csv > dataset/openfoodfacts_100k.csv
+```
+### 3. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Run Analysis
+Open main.ipynb in Jupyter or VS Code and run all cells.
+
+### 5. Launch Dashboard
+```bash
+streamlit run app.py
+```

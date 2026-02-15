@@ -4,7 +4,7 @@
 [Insert Summary Here: e.g., "This analysis of the Open Food Facts dataset reveals a significant market gap in low-sugar, high-protein snacks in the West African region. While 60% of current products contain high sugar levels, consumer demand for healthier alternatives is rising. Our predictive model suggests that introducing a plant-based protein bar could capture a 15% market share within the first year."]
 
 ## B. Project Links
-* **Notebook:** [Link to Google Colab / Hosted Notebook](YOUR_LINK_HERE)
+* **Notebook:** The fully work can be found in [GitHub repo link here](https://github.com/codetozombie/amalitech_nss) saved as `main.ipynb` and PDF and HTML files are also saved as `main.pdf` & `main.html` respectively. Furthermore the visualization for Story is saved as `app.py`
 * **Dashboard:** [Link to Dashboard](https://codetozombie-amalitech-nss-app-iirfmj.streamlit.app/)
 * **Presentation:** [Link to Slides (PDF/PPT)](YOUR_LINK_HERE)
 * **Video Walkthrough (Optional):** [Link to YouTube](YOUR_LINK_HERE)
@@ -25,10 +25,12 @@ For the Candidate's Choice requirement, I implemented [Name of Feature/Analysis]
 ---
 
 ## Project Structure
-* `notebook.ipynb`: The main analysis code.
-* `notebook.html` / `notebook.pdf`: Exported version of the analysis for easy viewing.
+* `main.ipynb`: The main analysis code.
+* `main.html` / `main.pdf`: Exported version of the analysis for easy viewing.
 * `requirements.txt`: List of dependencies.
 * `README.md`: Project documentation.
+* `helpers/` : Consist each story attempted and rough work I did.
+* `dataset/dataset_vs.csv` : The dataset is from the open food dataset where the first 100_000 rows where should. To get that after extracting the dataset on Windows run command in PowerShell ```Get-Content "en.openfoodfacts.org.products.csv" -TotalCount 100000 | Set-Content "openfoodfacts_100k.csv" ``` and Mac use this code in the Terminal ```head -n 100000 en.openfoodfacts.org.products.csv > openfoodfacts_100k.csv ``` and Linux use this command ```zcat en.openfoodfacts.org.products.csv.gz | head -n 100000 > openfoodfacts_100k.csv ```
 
 ## How to Run
 1.  Clone the repository.

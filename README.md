@@ -30,9 +30,15 @@ For the Candidate's Choice requirement, I implemented [Name of Feature/Analysis]
 * `requirements.txt`: List of dependencies.
 * `README.md`: Project documentation.
 * `helpers/` : Consist each story attempted and rough work I did.
-* `dataset/dataset_vs.csv` : The dataset is from the open food dataset where the first 100_000 rows where should. To get that after extracting the dataset on Windows run command in PowerShell ```Get-Content "en.openfoodfacts.org.products.csv" -TotalCount 100000 | Set-Content "openfoodfacts_100k.csv" ``` and Mac use this code in the Terminal ```head -n 100000 en.openfoodfacts.org.products.csv > openfoodfacts_100k.csv ``` and Linux use this command ```zcat en.openfoodfacts.org.products.csv.gz | head -n 100000 > openfoodfacts_100k.csv ```
+* `dataset/dataset_vs.csv` : The dataset is from the open food dataset where the first 100_000 rows where should. To get that after extracting the dataset on Windows run command in PowerShell ```Get-Content "en.openfoodfacts.org.products.csv" -TotalCount 100000 | Set-Content "openfoodfacts_100k.csv" ``` and Mac use this code in the Terminal ```head -n 100000 en.openfoodfacts.org.products.csv > openfoodfacts_100k.csv ``` and Linux use this command ```zcat en.openfoodfacts.org.products.csv.gz | head -n 100000 > openfoodfacts_100k.csv ```.
+* `dataset/snacks.csv` : The formatted data to be used in the visualization.
+* `app.py` : Script to open the visualizations using Streamlit.
 
 ## How to Run
 1.  Clone the repository.
+2. Create a `dataset` folder
+2. Download the [Open Food Dataset](https://world.openfoodfacts.org/data) and extract the file in the `dataset` folder.
+4. To get that after extracting the dataset on Windows run command in PowerShell ```Get-Content "en.openfoodfacts.org.products.csv" -TotalCount 100000 | Set-Content "openfoodfacts_100k.csv" ``` and Mac use this code in the Terminal ```head -n 100000 en.openfoodfacts.org.products.csv > openfoodfacts_100k.csv ``` and Linux use this command ```zcat en.openfoodfacts.org. Mind you rename accordingly.
 2.  Install dependencies: `pip install -r requirements.txt`
-3.  Open `notebook.ipynb` in Jupyter or VS Code.
+3.  Open `main.ipynb` in Jupyter or VS Code and run all cells
+4. To get the visualization run `streamlit run app.py` in the terminal

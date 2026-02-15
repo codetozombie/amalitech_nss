@@ -9,7 +9,7 @@ st.set_page_config(page_title="Nutrient Matrix", layout="wide")
 @st.cache_data
 def load_data():
     # Load your dataset
-    df = pd.read_csv("snacks.csv")
+    df = pd.read_csv("dataset/snacks.csv")
     
     # Ensure numerical columns are actually numbers
     df['proteins_100g'] = pd.to_numeric(df['proteins_100g'], errors='coerce').fillna(0)

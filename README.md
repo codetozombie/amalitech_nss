@@ -103,3 +103,31 @@ Open main.ipynb in Jupyter or VS Code and run all cells.
 ```bash
 streamlit run app.py
 ```
+
+## 🛑 CRITICAL: Pre-Submission Checklist
+
+**Before you submit your form, you MUST complete this checklist.**
+
+> ⚠️ **WARNING:** If you miss any of these items, your submission will be flagged as "Incomplete" and you will **NOT** be invited to an interview. 
+>
+> **We do not accept "permission error" excuses. Test your links in Incognito Mode.**
+
+### 1. Repository & Code Checks
+- [x] **My GitHub Repo is Public.** (Open the link in a Private/Incognito window to verify).
+- [x] **I have uploaded the `.ipynb` notebook file.**
+- [x] **I have ALSO uploaded an HTML or PDF export** of the notebook.
+- [x] **I have NOT uploaded the massive raw dataset.** (Use `.gitignore` or just don't commit the CSV).
+- [x] **My code uses Relative Paths.** 
+
+### 2. Deliverable Checks
+- [x] **My Dashboard link is publicly accessible.** (No login required).
+- [x] **My Presentation link is publicly accessible.** (Permissions set to "Anyone with the link can view").
+- [x] **I have updated this `README.md` file** with my Executive Summary and technical notes.
+
+### 3. Completeness
+- [x] I have completed **User Stories 1-4**.
+- [x] I have completed the **"Candidate's Choice"** challenge and explained it in the README.
+
+**✅ Only when you have checked every box above, proceed to the submission form.**
+
+---

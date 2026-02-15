@@ -12,9 +12,27 @@
 ## C. Technical Explanation
 
 ### Data Cleaning
-To ensure analysis accuracy, the following cleaning steps were performed:
-1.  **Handling Missing Values:** [e.g., Imputed missing nutritional values using the median of their respective product categories.]
-2.  **Duplicate Removal:** [e.g., Removed duplicate entries based on barcode (code) and product name.]
+The full data cleaning and exploration was done in `helpers/task_1.ipynb` and a `wrangle` function was derived out it. The following was done clean the data.
+1.  **Get rows with Snacks :** Subsetted the data to snacks only since we are dealing with Snacks
+2.  **Drop Columns:** 
+- Dropped coloumns with more than 80% of its values were missing
+- Dropped "code", "url", "created_t", "created_datetime", "last_modified_t", 
+    "last_modified_datetime", "last_modified_by", "last_updated_t", "last_updated_datetime" columns
+    since I was not going to use them 
+- Dropped columns  "categories", "categories_tags", "countries", "countries_tags", "main_category", "states", "states_tags". The duplicated each each other 
+- Dropped columns "ingredients_tags", "ingredients_analysis_tags", "serving_size", "serving_quantity". I was not going to use them.
+- Filled missing values in product_name and countries_en with "Unknown"
+- Replace nutriscore_grade's missing vale with unknown
+- replace missing nova_group(food_processed) with the most common value (mode)
+- reomve rows with energy_kcal_100g > 900 i.e reaching its theoretical limits
+- reomve rows with energy_100g > 4000 i.e reaching its theoretical limits
+- reomve rows with fat_100g, sugars_100g, proteins_100g , fruits-vegetables-nuts-estimate-from-ingredients_100g, salt_100g, and cabohydrate_100g> 100 i.e reaching theoretical limits
+- remove  saturated_fat_100g which did not satify the condition Saturated Fat must be <= Total Fat 
+- reomve rows with fiber_100g > 40 i.e reaching theoretical limits
+- reomve rows with nutrition-score-fr_100g < -15 or > 40 i. reaching its theoretical limits
+- handle na values for categoies_en for snacks and convert to lowercase
+
+
 3.  **Outlier Detection:** [e.g., Filtered out products with impossible values (e.g., sugar content > 100g per 100g).]
 
 ### Candidate's Choice

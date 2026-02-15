@@ -6,7 +6,7 @@ This market analysis of the Open Food Facts dataset reveals a significant "Blue 
 ## B. Project Links
 * **Notebook:** The full analysis code, PDF, and HTML reports can be found in the [GitHub Repository](https://github.com/codetozombie/amalitech_nss).
 * **Dashboard:** [Interactive Streamlit Dashboard](https://codetozombie-amalitech-nss-app-iirfmj.streamlit.app/)
-* **Presentation:** [Link to Slides (PDF/PPT)](YOUR_LINK_HERE)
+* **Presentation:** [Link to Slides (PDF/PPT)](https://ugedugh-my.sharepoint.com/:p:/g/personal/ankamoako_st_ug_edu_gh/IQAwgeSfabzwSJgxo-naogyVATivDB1el0Zc5WeGf5My4oU?e=csbPt0)
 * **Video Walkthrough (Optional):** [Link to YouTube](YOUR_LINK_HERE)
 
 ## C. Technical Explanation
